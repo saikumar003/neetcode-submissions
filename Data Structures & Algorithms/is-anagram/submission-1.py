@@ -1,0 +1,10 @@
+from collections import Counter
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s)!= len(t):
+            return False
+        #Time Complexity  O(n)
+        # space Complexity O(N)
+        s_counter = Counter(s)
+        t_counter = Counter(t)
+        return s_counter == t_counter
