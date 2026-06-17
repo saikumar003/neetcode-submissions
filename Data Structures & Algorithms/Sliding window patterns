@@ -93,3 +93,124 @@ print(max_count)
 
 Maximum Sum of Distinct Subarray of Size K
 -------------------------------------------
+
+Brute Force sol
+---------------
+
+nums = [1,5,4,2,9,9,9]
+k = 3
+
+max_sum = 0
+
+for i in range(len(nums)-k+1):
+
+    window = nums[i:i+k]
+
+    if len(set(window)) == k:
+
+        max_sum = max(max_sum, sum(window))
+
+print(max_sum)
+
+Optimized Sol:
+
+from typing import List
+
+class Solution:
+    def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+        if len(nums) < k:
+            return 0
+        
+        max_sum = 0
+        current_sum = 0
+        freq = {}
+        
+        # Step 1: Build first window of size k
+        for i in range(k):
+            current_sum += nums[i]
+            
+            # Basic way to count frequency
+            if nums[i] in freq:
+                freq[nums[i]] += 1
+            else:
+                freq[nums[i]] = 1
+        
+        # Check if first window has all distinct elements
+        if len(freq) == k:
+            max_sum = current_sum
+        
+        # Step 2: Slide the window
+        for i in range(k, len(nums)):
+            # Add new element
+            current_sum += nums[i]
+            if nums[i] in freq:
+                freq[nums[i]] += 1
+            else:
+                freq[nums[i]] = 1
+            
+            # Remove left element (out of window)
+            left = nums[i - k]
+            freq[left] -= 1
+            if freq[left] == 0:
+                del freq[left]          # Remove from dictionary if count becomes 0
+            current_sum -= left
+
+            # If current window has exactly k distinct numbers
+            if len(freq) == k:
+                max_sum = max(max_sum, current_sum)
+        
+        return max_sum
+Time & Space Complexity: HashMap vs Set
+This is the core reason we prefer HashMap in the optimized solution.
+
+Important Clarification First
+Individually, both have the same average complexity:
+
+Operation	Set	HashMap/Dict
+Insert	O(1)	O(1)
+Delete	O(1)	O(1)
+Lookup	O(1)	O(1)
+The difference is NOT in the data structure itself.
+The difference is in HOW we use them.
+
+1. Brute Force Approach (Using Set)
+
+
+python
+for i in range(len(nums) - k + 1):
+    window = nums[i:i+k]           # O(k)
+    if len(set(window)) == k:      # O(k) - rebuilds set from scratch
+        max_sum = max(max_sum, sum(window))  # O(k)
+Complexity Analysis
+Step	Work per Window	Total Windows	Total Time
+Slice nums[i:i+k]	O(k)	n - k + 1	O(nk)
+set(window)	O(k)	n - k + 1	O(nk)
+sum(window)	O(k)	n - k + 1	O(nk)
+Time: O(nk)
+Space: O(k) (temporary set per iteration)
+
+2. Optimized Sliding Window (Using HashMap)
+
+
+python
+freq = {}                    # maintained across all iterations
+current_sum = 0
+ 
+# Add new
+freq[nums[i]] = freq.get(nums[i], 0) + 1
+current_sum += nums[i]
+ 
+# Remove old
+freq[left] -= 1
+if freq[left] == 0:
+    del freq[left]
+current_sum -= left
+Complexity Analysis
+Step	Work per Window	Total Windows	Total Time
+Add to freq	O(1)	n - k + 1	O(n)
+Remove from freq	O(1)	n - k + 1	O(n)
+Update current_sum	O(1)	n - k + 1	O(n)
+Check len(freq)	O(1)	n - k + 1	O(n)
+Time: O(n)
+Space: O(k) (single freq map, reused)
+
