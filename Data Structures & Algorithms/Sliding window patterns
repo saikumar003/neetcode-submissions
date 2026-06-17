@@ -1,0 +1,95 @@
+sliding windows
+
+You said: how to print subarrays of size kTo print all contiguous subarrays of a specific size k, you use a sliding window technique. Iterate through the array with a starting index from 0 up to n-k (where n is array length), and print the k consecutive elements from that start point.Python Implementationpythondef print_subarrays_of_size_k(arr, k):
+    n = len(arr)
+    if k > n or k <= 0:
+        print("Invalid size")
+        return
+
+    # Loop from the beginning to n - k
+    for i in range(n - k + 1):
+        # Print the subarray of size k starting at index i
+        subarray = arr[i : i + k]
+        print(subarray)
+
+# Example Usage
+arr = [1, 2, 3, 4, 5]
+k = 3
+print_subarrays_of_size_k(arr, k)
+
+Maximum subarray sum with size k
+--------------------------------
+
+window_sum = sum(nums[:k])
+
+print(window_sum)
+
+max_sum = window_sum
+
+for i in range(k,len(nums)):
+    
+    window_sum += nums[i] - nums[i-k]
+    
+    max_sum = max(max_sum,window_sum)
+    
+print(max_sum)
+
+Average 
+
+def find_averages_of_subarrays(arr, k):
+    n = len(arr)
+    if k > n or k <= 0:
+        return []
+
+    averages = []
+    window_sum = sum(arr[:k])  # Sum of the first window
+    averages.append(window_sum / k)
+
+    # Slide the window across the rest of the array
+    for i in range(1, n - k + 1):
+        # Subtract element leaving (i-1) and add element entering (i + k - 1)
+        window_sum = window_sum - arr[i - 1] + arr[i + k - 1]
+        averages.append(window_sum / k)
+
+    return averages
+
+# Example
+print(find_averages_of_subarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5))
+
+
+Maximum Number of Vowels in a Substring of Size K
+--------------------------------------------------
+
+s = "abciiidef"
+k = 3
+
+vowels = "aeiou"
+
+current_count = 0
+
+# first window
+for i in range(k):
+    if s[i] in vowels:
+        current_count += 1
+
+max_count = current_count
+
+# slide window
+for i in range(k, len(s)):
+
+    # remove left character
+    if s[i-k] in vowels:
+        current_count -= 1
+
+    # add new character
+    if s[i] in vowels:
+        current_count += 1
+
+    max_count = max(max_count, current_count)
+
+print(max_count)
+
+# Output: [2.2, 2.8, 2.4, 3.6, 2.8]
+
+Maximum Sum of Distinct Subarray of Size K
+-------------------------------------------
