@@ -1,0 +1,49 @@
+Two Sum -> Opposite Direction
+
+def two_sum_sorted(nums: list[int], target: int) -> list[int]:
+    left = 0
+    right = len(nums) - 1
+    
+    while left < right:
+        current_sum = nums[left] + nums[right]
+        
+        if current_sum == target:
+            return [left, right] # Found the indices
+        elif current_sum < target:
+            left += 1  # Sum is too small, move left pointer to increase value
+        else:
+            right -= 1 # Sum is too large, move right pointer to decrease value
+            
+    return []
+
+Time complexity 0(n) Space Complexity O(N)
+
+
+Remove Duplicates -> Same direction -->
+
+def remove_duplicates(nums: list[int]) -> list[int]:
+    
+    if not nums:
+        
+        return 0
+    
+    slow = 0
+    
+    for fast in range(1,len(nums)):
+        
+  
+            
+        if nums[slow] != nums[fast]:
+                
+            slow+=1
+                
+            nums[slow] = nums[fast]
+                
+
+    return slow+1
+    
+print(remove_duplicates([1,1,2,2,3]))
+
+
+        
+        
